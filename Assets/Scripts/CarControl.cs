@@ -53,7 +53,7 @@ public class CarControl : MonoBehaviour
 			// Apply steering to Wheel colliders that have "Steerable" enabled
 			if (wheel.steerable)
 			{
-				wheel.WheelCollider.steerAngle = hInput * currentSteerRange;
+				wheel.wheelCollider.steerAngle = hInput * currentSteerRange;
 			}
 
 			if (isAccelerating)
@@ -61,16 +61,16 @@ public class CarControl : MonoBehaviour
 				// Apply torque to Wheel colliders that have "Motorized" enabled
 				if (wheel.motorized)
 				{
-					wheel.WheelCollider.motorTorque = vInput * currentMotorTorque;
+					wheel.wheelCollider.motorTorque = vInput * currentMotorTorque;
 				}
-				wheel.WheelCollider.brakeTorque = 0;
+				wheel.wheelCollider.brakeTorque = 0;
 			}
 			else
 			{
 				// If the user is trying to go in the opposite direction
 				// apply brakes to all wheels
-				wheel.WheelCollider.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
-				wheel.WheelCollider.motorTorque = 0;
+				wheel.wheelCollider.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
+				wheel.wheelCollider.motorTorque = 0;
 			}
 		}
 	}
