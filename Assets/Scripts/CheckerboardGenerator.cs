@@ -6,7 +6,7 @@ public class CheckerboardGenerator : MonoBehaviour
 	[SerializeField] private Material blackMaterial;
 	[SerializeField] private float tileSize = 1;
 
-	void Start()
+	public void Start()
 	{
 		GenerateCheckerboard();
 	}

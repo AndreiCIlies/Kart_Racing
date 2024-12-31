@@ -1,10 +1,10 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class CarControl : MonoBehaviour
 {
-	[SerializeField] private float motorTorque = 20000;
-	[SerializeField] private float brakeTorque = 200000;
+	[SerializeField] private float motorTorque = 500;
+	[SerializeField] private float brakeTorque = 2000;
 	[SerializeField] private float maxSpeed = 50;
 	[SerializeField] private float steeringRange = 30;
 	[SerializeField] private float steeringRangeAtMaxSpeed = 5;
@@ -12,18 +12,15 @@ public class CarControl : MonoBehaviour
 	private WheelControl[] wheels;
 	private Rigidbody rigidBody;
 
-	// Start is called before the first frame update
 	public void Start()
 	{
 		rigidBody = GetComponent<Rigidbody>();
-
-		// Find all child GameObjects that have the WheelControl script attached
 		wheels = GetComponentsInChildren<WheelControl>();
 	}
 
-	// Update is called once per frame
 	public void Update()
 	{
+		// Input.GetAxis() smooths out the input values for keyboard input
 		float vInput = Input.GetAxis("Vertical");
 		float hInput = Input.GetAxis("Horizontal");
 
@@ -31,21 +28,16 @@ public class CarControl : MonoBehaviour
 		// (this returns a negative number when traveling backwards)
 		float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
 
-
-		// Calculate how close the car is to top speed
-		// as a number from zero to one
+		// Calculate how close the car is to top speed as a number from zero to one
 		float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
 
-		// Use that to calculate how much torque is available 
-		// (zero torque at top speed)
-		float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
+		// Calculate how much torque is available (zero torque at top speed)
+		float currentMotorTorque = MotorTorqueFn(speedFactor);
 
-		// �and to calculate how much to steer 
-		// (the car steers more gently at top speed)
+		// Calculate how much to steer (the car steers more gently at top speed)
 		float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
-		// Check whether the user input is in the same direction 
-		// as the car's velocity
+		// Check whether the user input is in the same as the car's velocity
 		bool isAccelerating = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed);
 
 		foreach (var wheel in wheels)
@@ -67,11 +59,17 @@ public class CarControl : MonoBehaviour
 			}
 			else
 			{
-				// If the user is trying to go in the opposite direction
-				// apply brakes to all wheels
 				wheel.wheelCollider.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
 				wheel.wheelCollider.motorTorque = 0;
 			}
 		}
+	}
+
+	private float MotorTorqueFn(float speedFactor)
+	{
+		Assert.IsTrue(speedFactor >= 0 && speedFactor <= 1, "Speed factor must be between 0 and 1");
+
+		return Mathf.Lerp(motorTorque, 0, speedFactor);
+		// return motorTorque / 10;
 	}
 }
