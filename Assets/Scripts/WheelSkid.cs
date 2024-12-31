@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 public class WheelSkid : MonoBehaviour
 {
 	[SerializeField] private WheelCollider wheelCollider;
-	[SerializeField] private float slipThreshold = 0.3f;
+	[SerializeField] private float slipThreshold = 1.0f;
 
 	private TrailRenderer trailRenderer;
 
