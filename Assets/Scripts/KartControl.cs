@@ -1,21 +1,28 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class CarControl : MonoBehaviour
+public class KartControl : MonoBehaviour
 {
-	[SerializeField] private float motorTorque = 500;
+	[SerializeField] private float maxSpeedKPH = 120;
+	[SerializeField] private float steeringRange = 25;
+	[SerializeField] private float steeringRangeAtMaxSpeed = 2;
+	[SerializeField] private float maxMotorTorque = 150;
 	[SerializeField] private float brakeTorque = 2000;
-	[SerializeField] private float maxSpeed = 50;
-	[SerializeField] private float steeringRange = 30;
-	[SerializeField] private float steeringRangeAtMaxSpeed = 5;
 
 	private WheelControl[] wheels;
 	private Rigidbody rigidBody;
+	private float maxSpeedMPS;
 
 	public void Start()
 	{
 		rigidBody = GetComponent<Rigidbody>();
 		wheels = GetComponentsInChildren<WheelControl>();
+
+		Assert.IsNotNull(rigidBody, $"Rigidbody not found on {name}");
+		Assert.IsNotNull(wheels, $"WheelControl not found on {name}");
+		Assert.IsTrue(wheels.Length == 4, $"4 WheelControl not found on {name}. Found {wheels.Length} instead.");
+
+		maxSpeedMPS = maxSpeedKPH * Const.KPH_TO_MPS;
 	}
 
 	public void Update()
@@ -26,10 +33,10 @@ public class CarControl : MonoBehaviour
 
 		// Calculate current speed in relation to the forward direction of the car
 		// (this returns a negative number when traveling backwards)
-		float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
+		float forwardSpeed = rigidBody.linearVelocity.magnitude;
 
 		// Calculate how close the car is to top speed as a number from zero to one
-		float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
+		float speedFactor = Mathf.InverseLerp(0, maxSpeedMPS, forwardSpeed);
 
 		// Calculate how much torque is available (zero torque at top speed)
 		float currentMotorTorque = MotorTorqueFn(speedFactor);
@@ -69,7 +76,6 @@ public class CarControl : MonoBehaviour
 	{
 		Assert.IsTrue(speedFactor >= 0 && speedFactor <= 1, "Speed factor must be between 0 and 1");
 
-		return Mathf.Lerp(motorTorque, 0, speedFactor);
-		// return motorTorque / 10;
+		return Mathf.Lerp(maxMotorTorque, 0, speedFactor);
 	}
 }

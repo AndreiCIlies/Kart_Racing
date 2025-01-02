@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.UIElements;
 
 public class WheelControl : MonoBehaviour
 {
@@ -17,7 +16,7 @@ public class WheelControl : MonoBehaviour
 	public void Start()
 	{
 		wheelCollider = GetComponent<WheelCollider>();
-		Assert.IsNotNull(wheelCollider, "WheelCollider not found on " + name);
+		Assert.IsNotNull(wheelCollider, $"WheelCollider not found on {name}");
 
 		additionalRotation = Quaternion.Euler(additionalRotationEuler);
 	}

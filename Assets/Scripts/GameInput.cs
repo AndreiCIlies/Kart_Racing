@@ -6,7 +6,7 @@ public class GameInput : MonoBehaviour
 
 	private InputSystem_Actions inputActions;
 
-	private void Awake()
+	public void Awake()
 	{
 		if (Instance != null)
 		{

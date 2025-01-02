@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class CarFollow : MonoBehaviour
+public class KartFollow : MonoBehaviour
 {
 	[SerializeField] private Transform target;
 	[SerializeField] private Vector3 offset = new(0, 5, -10);
@@ -9,7 +9,7 @@ public class CarFollow : MonoBehaviour
 
 	public void Start()
 	{
-		Assert.IsNotNull(target, "The CarFollow component needs a target.");
+		Assert.IsNotNull(target, $"Transform (target) not found on {name}");
 	}
 
 	public void FixedUpdate()

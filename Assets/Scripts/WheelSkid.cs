@@ -12,8 +12,8 @@ public class WheelSkid : MonoBehaviour
 	{
 		trailRenderer = GetComponent<TrailRenderer>();
 
-		Assert.IsNotNull(trailRenderer, "No component of type TrailRenderer found for WheelSkid.");
-		Assert.IsNotNull(wheelCollider, "Wheel Collider is not assigned.");
+		Assert.IsNotNull(trailRenderer, $"TrailRenderer not found on {name}");
+		Assert.IsNotNull(wheelCollider, $"WheelCollider not found on {name}");
 
 		trailRenderer.emitting = false;
 	}

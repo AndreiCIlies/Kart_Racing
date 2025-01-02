@@ -1167,7 +1167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   motorTorque: 150
   brakeTorque: 2000
-  maxSpeed: 90
+  maxSpeedKPH: 120
   steeringRange: 25
   steeringRangeAtMaxSpeed: 2
 --- !u!4 &4202967460633139851 stripped
