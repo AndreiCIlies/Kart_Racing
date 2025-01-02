@@ -20,7 +20,7 @@ public class KartControl : MonoBehaviour
 
 		Assert.IsNotNull(rigidBody, $"Rigidbody not found on {name}");
 		Assert.IsNotNull(wheels, $"WheelControl not found on {name}");
-		Assert.IsTrue(wheels.Length == 4, $"4 WheelControl not found on {name}. Found {wheels.Length} instead.");
+		Assert.IsTrue(wheels.Length == 4, $"WheelControls not of length 4 on {name}. Found {wheels.Length} WheelControls instead");
 
 		maxSpeedMPS = maxSpeedKPH * Const.KPH_TO_MPS;
 	}
@@ -31,20 +31,20 @@ public class KartControl : MonoBehaviour
 		float vInput = Input.GetAxis("Vertical");
 		float hInput = Input.GetAxis("Horizontal");
 
-		// Calculate current speed in relation to the forward direction of the car
+		// Calculate current speed in relation to the forward direction of the kart
 		// (this returns a negative number when traveling backwards)
 		float forwardSpeed = rigidBody.linearVelocity.magnitude;
 
-		// Calculate how close the car is to top speed as a number from zero to one
+		// Calculate how close the kart is to top speed as a number from zero to one
 		float speedFactor = Mathf.InverseLerp(0, maxSpeedMPS, forwardSpeed);
 
 		// Calculate how much torque is available (zero torque at top speed)
 		float currentMotorTorque = MotorTorqueFn(speedFactor);
 
-		// Calculate how much to steer (the car steers more gently at top speed)
+		// Calculate how much to steer (the kart steers more gently at top speed)
 		float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
-		// Check whether the user input is in the same as the car's velocity
+		// Check whether the user input is in the same as the kart's velocity
 		bool isAccelerating = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed);
 
 		foreach (var wheel in wheels)
