@@ -3,11 +3,14 @@ using UnityEngine.AI;
 
 public class KartOpponentAI : MonoBehaviour
 {
-    public Transform[] waypoints;
+    public Transform[] waypoints; 
     public Transform finishLine; 
     private NavMeshAgent agent;
     private int currentWaypointIndex = 0;
-    private bool isHeadingToFinish = false; 
+    private bool isHeadingToFinish = false;
+
+    public float raycastOffset = 1.0f; 
+    public float rotationSpeed = 10f; 
 
     void Start()
     {
@@ -25,6 +28,8 @@ public class KartOpponentAI : MonoBehaviour
 
     void Update()
     {
+        AlignToGround(); 
+
         if (!agent.pathPending && agent.remainingDistance < 1f)
         {
             if (!isHeadingToFinish)
@@ -34,7 +39,7 @@ public class KartOpponentAI : MonoBehaviour
                 if (currentWaypointIndex >= waypoints.Length)
                 {
                     isHeadingToFinish = true;
-                    agent.SetDestination(finishLine.position); 
+                    agent.SetDestination(finishLine.position);
                 }
                 else
                 {
@@ -50,5 +55,36 @@ public class KartOpponentAI : MonoBehaviour
                 }
             }
         }
+    }
+
+    void AlignToGround()
+    {
+        RaycastHit hitFront, hitBack;
+
+        Vector3 frontPosition = transform.position + transform.forward * raycastOffset;
+        Vector3 backPosition = transform.position - transform.forward * raycastOffset;
+
+        bool frontHit = Physics.Raycast(frontPosition + Vector3.up, Vector3.down, out hitFront, 5f);
+        bool backHit = Physics.Raycast(backPosition + Vector3.up, Vector3.down, out hitBack, 5f);
+
+        if (frontHit && backHit)
+        {
+            Vector3 groundNormal = (hitFront.normal + hitBack.normal).normalized;
+
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
+            transform.rotation = targetRotation;
+
+        }
+        else
+        {
+            Debug.LogWarning("Nu s-a detectat terenul pentru alinierea kartului.");
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position + transform.forward * raycastOffset + Vector3.up, Vector3.down * 2f);
+        Gizmos.DrawRay(transform.position - transform.forward * raycastOffset + Vector3.up, Vector3.down * 2f);
     }
 }

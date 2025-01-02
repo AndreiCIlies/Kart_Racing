@@ -793,7 +793,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5107968123332168213, guid: c311e7135c0a14f4a870e0d8c3e7495f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.15
+      value: -1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5107968123332168213, guid: c311e7135c0a14f4a870e0d8c3e7495f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -809,6 +809,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3537612758363144241, guid: c311e7135c0a14f4a870e0d8c3e7495f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1372825235}
+    - targetCorrespondingSourceObject: {fileID: 3537612758363144241, guid: c311e7135c0a14f4a870e0d8c3e7495f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1372825239}
     - targetCorrespondingSourceObject: {fileID: 8796951928071333738, guid: c311e7135c0a14f4a870e0d8c3e7495f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1372825230}
@@ -840,6 +843,8 @@ MonoBehaviour:
   - {fileID: 1829994047}
   - {fileID: 1824349167}
   finishLine: {fileID: 522622210}
+  raycastOffset: 1
+  rotationSpeed: 5
 --- !u!195 &1372825230
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -884,6 +889,27 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!65 &1372825239
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372825226}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1.5}
+  m_Center: {x: 0, y: -1, z: -0.5}
 --- !u!1 &1553095287
 GameObject:
   m_ObjectHideFlags: 0
