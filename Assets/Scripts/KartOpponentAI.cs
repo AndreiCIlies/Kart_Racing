@@ -3,32 +3,43 @@ using UnityEngine.AI;
 
 public class KartOpponentAI : MonoBehaviour
 {
-    public Transform[] waypoints; 
-    public Transform finishLine; 
+    public Transform[] waypoints;
+    public Transform finishLine;
     private NavMeshAgent agent;
     private int currentWaypointIndex = 0;
     private bool isHeadingToFinish = false;
 
-    public float raycastOffset = 1.0f; 
-    public float rotationSpeed = 10f; 
+    public float raycastOffset = 1.0f;
+    public float rotationSpeed = 10f;
+
+    private bool isRaceStarted = false; 
+    private bool hasFinished = false;
+    private Vector3 initialPosition; 
+    private Quaternion initialRotation; 
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.isStopped = true;
+        agent.updatePosition = false; 
+        agent.updateRotation = false; 
 
-        if (waypoints.Length > 0)
-        {
-            agent.SetDestination(waypoints[currentWaypointIndex].position);
-        }
-        else
-        {
-            Debug.LogWarning("Nu exista waypoint-uri setate!");
-        }
+        initialPosition = transform.position;
+        initialRotation = transform.rotation;
+
+        RaceTimer.OnRaceStart += StartRace; 
     }
 
     void Update()
     {
-        AlignToGround(); 
+        if (!isRaceStarted)
+        {
+            transform.position = initialPosition;
+            transform.rotation = initialRotation;
+            return;
+        }
+
+        AlignToGround();
 
         if (!agent.pathPending && agent.remainingDistance < 1f)
         {
@@ -46,12 +57,16 @@ public class KartOpponentAI : MonoBehaviour
                     agent.SetDestination(waypoints[currentWaypointIndex].position);
                 }
             }
-            else
+            else if (!hasFinished && agent.remainingDistance < 1f)
             {
-                if (agent.remainingDistance < 1f)
+                hasFinished = true;
+                agent.isStopped = true;
+                Debug.Log("KartOpponentAI: The AI kart has reached the finish line!");
+
+                RaceTimer raceTimer = Object.FindAnyObjectByType<RaceTimer>();
+                if (raceTimer != null)
                 {
-                    agent.isStopped = true;
-                    Debug.Log("Kartul a ajuns la linia de finish!");
+                    raceTimer.StopRaceTimer(false); 
                 }
             }
         }
@@ -73,11 +88,30 @@ public class KartOpponentAI : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
             transform.rotation = targetRotation;
-
         }
         else
         {
-            Debug.LogWarning("Nu s-a detectat terenul pentru alinierea kartului.");
+            Debug.LogWarning("Ground for kart alignment not detected.");
+        }
+    }
+
+    void StartRace()
+    {
+        isRaceStarted = true; 
+
+        agent.Warp(transform.position);
+
+        agent.isStopped = false;
+        agent.updatePosition = true;
+        agent.updateRotation = true;
+
+        if (waypoints.Length > 0)
+        {
+            agent.SetDestination(waypoints[currentWaypointIndex].position);
+        }
+        else
+        {
+            Debug.LogWarning("No waypoints are set!");
         }
     }
 
@@ -86,5 +120,10 @@ public class KartOpponentAI : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position + transform.forward * raycastOffset + Vector3.up, Vector3.down * 2f);
         Gizmos.DrawRay(transform.position - transform.forward * raycastOffset + Vector3.up, Vector3.down * 2f);
+    }
+
+    private void OnDestroy()
+    {
+        RaceTimer.OnRaceStart -= StartRace; 
     }
 }
