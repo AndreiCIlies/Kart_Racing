@@ -60,7 +60,7 @@ public class KartControl : MonoBehaviour
         float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
         // Determine if acceleration direction matches movement direction
-        bool isSameDirection = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed) || Mathf.Approximately(forwardSpeed, 0);
+        bool isSameDirection = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed) || Mathf.Abs(forwardSpeed) < 0.1f;
 
         // Update wheel behavior
         foreach (var wheel in wheels)
