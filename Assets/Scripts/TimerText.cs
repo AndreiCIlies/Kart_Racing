@@ -10,17 +10,10 @@ public class TimerText
         textElement = text;
     }
 
-    public void ConfigureText(int fontSize, TextAnchor alignment, Vector2 anchorMin, Vector2 anchorMax, Vector2 anchoredPosition)
+    public void ConfigureText(int fontSize, TextAnchor alignment)
     {
         textElement.fontSize = fontSize;
-
         textElement.alignment = ConvertAlignment(alignment);
-
-        RectTransform rectTransform = textElement.GetComponent<RectTransform>();
-        rectTransform.anchorMin = anchorMin;
-        rectTransform.anchorMax = anchorMax;
-        rectTransform.pivot = new Vector2(0.5f, 0.5f);
-        rectTransform.anchoredPosition = anchoredPosition;
     }
 
     public void SetText(string text)

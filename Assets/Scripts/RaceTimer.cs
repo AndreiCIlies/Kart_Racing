@@ -6,7 +6,7 @@ public class RaceTimer : MonoBehaviour
 {
     [SerializeField] private TMP_Text countdownTextUI;
     [SerializeField] private TMP_Text timerTextUI;
-    [SerializeField] private ResultsDisplay resultsDisplay; // Reference to ResultsDisplay
+    [SerializeField] private ResultsDisplay resultsDisplay;
 
     private TimerText countdownText;
     private TimerText timerText;
@@ -14,15 +14,15 @@ public class RaceTimer : MonoBehaviour
     private float raceTime = 0f;
     private bool isRunning = false;
 
-    public static event System.Action OnRaceStart; // Event for race start
+    public static event System.Action OnRaceStart;
 
     private void Start()
     {
         countdownText = new TimerText(countdownTextUI);
         timerText = new TimerText(timerTextUI);
 
-        countdownText.ConfigureText(100, TextAnchor.MiddleCenter, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero);
-        timerText.ConfigureText(50, TextAnchor.UpperRight, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-20f, -20f));
+        countdownText.ConfigureText(100, TextAnchor.MiddleCenter);
+        timerText.ConfigureText(50, TextAnchor.UpperRight);
 
         timerText.SetActive(false);
         StartCoroutine(CountdownRoutine());
@@ -51,7 +51,7 @@ public class RaceTimer : MonoBehaviour
         isRunning = true;
         timerText.SetActive(true);
 
-        OnRaceStart?.Invoke(); // Notify listeners that the race has started
+        OnRaceStart?.Invoke();
     }
 
     private void Update()
@@ -67,12 +67,11 @@ public class RaceTimer : MonoBehaviour
     {
         if (isRunning)
         {
-            isRunning = false; // Stop the timer
+            isRunning = false;
             string formattedTime = FormatTime(raceTime);
 
             if (resultsDisplay != null)
             {
-                // Add results for player or rival player
                 if (isPlayer)
                 {
                     Debug.Log($"Player finished with time: {formattedTime}");
