@@ -10,6 +10,7 @@ public class KartControl : MonoBehaviour
 	[SerializeField] private float brakeTorque = 2000;
 	[SerializeField] private RaceTimer raceTimer; // Reference to RaceTimer
 	[SerializeField] private Collider finishLine; // Reference to the finish line collider
+	
 
 	private WheelControl[] wheels;
 	private Rigidbody rigidBody;
@@ -140,7 +141,7 @@ public class KartControl : MonoBehaviour
 		{
 			hasFinished = true; // Mark the kart as finished
 			raceTimer.StopRaceTimer(true); // Call RaceTimer to display results for the player
-			Debug.Log("Player finished the race!");
+			Debug.Log("You finished the race!");
 		}
 	}
 

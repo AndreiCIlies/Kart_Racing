@@ -74,13 +74,13 @@ public class RaceTimer : MonoBehaviour
             {
                 if (isPlayer)
                 {
-                    Debug.Log($"Player finished with time: {formattedTime}");
-                    resultsDisplay.AddResult("Player", formattedTime);
+                    Debug.Log($"You finished with time: {formattedTime}");
+                    resultsDisplay.AddResult("You", formattedTime);
                 }
                 else
                 {
-                    Debug.Log($"Rival Player finished with time: {formattedTime}");
-                    resultsDisplay.AddResult("Rival Player", formattedTime);
+                    Debug.Log($"AI finished with time: {formattedTime}");
+                    resultsDisplay.AddResult("AI", formattedTime);
                 }
             }
         }

@@ -3,6 +3,9 @@ using UnityEngine.AI;
 
 public class KartOpponentAI : MonoBehaviour
 {
+    [SerializeField] private RaceTimer raceTimer; // Reference to RaceTimer
+    [SerializeField] private Collider finishLineCol; // Reference to the finish line collider
+
     public Transform[] waypoints;
     public Transform finishLine;
     private NavMeshAgent agent;
@@ -15,7 +18,7 @@ public class KartOpponentAI : MonoBehaviour
     private bool isRaceStarted = false; 
     private bool hasFinished = false;
     private Vector3 initialPosition; 
-    private Quaternion initialRotation; 
+    private Quaternion initialRotation;
 
     void Start()
     {
@@ -120,6 +123,18 @@ public class KartOpponentAI : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position + transform.forward * raycastOffset + Vector3.up, Vector3.down * 2f);
         Gizmos.DrawRay(transform.position - transform.forward * raycastOffset + Vector3.up, Vector3.down * 2f);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (hasFinished) return; // Prevent multiple triggers
+
+        if (other == finishLineCol) // Check if the finish line collider is hit
+        {
+            hasFinished = true; // Mark the kart as finished
+            raceTimer.StopRaceTimer(false); // Call RaceTimer to display results for the AI
+            Debug.Log("AI finished the race!");
+        }
     }
 
     private void OnDestroy()
