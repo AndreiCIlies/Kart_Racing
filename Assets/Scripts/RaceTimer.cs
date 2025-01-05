@@ -5,111 +5,112 @@ using UnityEngine.SceneManagement;
 
 public class RaceTimer : MonoBehaviour
 {
-    [SerializeField] private TMP_Text countdownTextUI;
-    [SerializeField] private TMP_Text timerTextUI;
-    [SerializeField] private ResultsDisplay resultsDisplay;
+	[SerializeField] private TMP_Text countdownTextUI;
+	[SerializeField] private TMP_Text timerTextUI;
+	[SerializeField] private ResultsDisplay resultsDisplay;
 
-    private TimerText countdownText;
-    private TimerText timerText;
+	private TimerText countdownText;
+	private TimerText timerText;
 
-    private float raceTime = 0f;
-    private bool isRunning = false;
+	private float raceTime = 0f;
+	private bool isRunning = false;
 
-    private float playerFinishTime = -1f;
-    private float aiFinishTime = -1f;
+	private float playerFinishTime = -1f;
+	private float aiFinishTime = -1f;
 
-    public static event System.Action OnRaceStart;
+	public static event System.Action OnRaceStart;
 
-    private void Start()
-    {
-        countdownText = new TimerText(countdownTextUI);
-        timerText = new TimerText(timerTextUI);
+	private void Start()
+	{
+		countdownText = new TimerText(countdownTextUI);
+		timerText = new TimerText(timerTextUI);
 
-        countdownText.ConfigureText(100, TextAnchor.MiddleCenter);
-        timerText.ConfigureText(50, TextAnchor.UpperRight);
+		countdownText.ConfigureText(100, TextAnchor.MiddleCenter);
+		timerText.ConfigureText(50, TextAnchor.UpperRight);
 
-        timerText.SetActive(false);
-        StartCoroutine(CountdownRoutine());
-    }
+		timerText.SetActive(false);
+		StartCoroutine(CountdownRoutine());
+	}
 
-    private IEnumerator CountdownRoutine()
-    {
-        int countdown = 3;
+	private IEnumerator CountdownRoutine()
+	{
+		int countdown = 3;
 
-        while (countdown > 0)
-        {
-            countdownText.SetText(countdown.ToString());
-            yield return new WaitForSeconds(1f);
-            countdown--;
-        }
+		while (countdown > 0)
+		{
+			countdownText.SetText(countdown.ToString());
+			yield return new WaitForSeconds(1f);
+			countdown--;
+		}
 
-        countdownText.SetText("GO!");
-        yield return new WaitForSeconds(1f);
-        countdownText.SetActive(false);
+		countdownText.SetText("GO!");
+		yield return new WaitForSeconds(1f);
+		countdownText.SetActive(false);
 
-        StartRaceTimer();
-    }
+		StartRaceTimer();
+	}
 
-    private void StartRaceTimer()
-    {
-        isRunning = true;
-        timerText.SetActive(true);
+	private void StartRaceTimer()
+	{
+		isRunning = true;
+		timerText.SetActive(true);
 
-        OnRaceStart?.Invoke();
-    }
+		OnRaceStart?.Invoke();
+	}
 
-    private void Update()
-    {
-        if (isRunning)
-        {
-            raceTime += Time.deltaTime;
-            timerText.SetText(FormatTime(raceTime));
-        }
-    }
+	private void Update()
+	{
+		if (isRunning)
+		{
+			raceTime += Time.deltaTime;
+			timerText.SetText(FormatTime(raceTime));
+		}
+	}
 
-    private IEnumerator ResetSceneAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload current scene
-    }
+	private IEnumerator ResetSceneAfterDelay(float delay)
+	{
+		yield return new WaitForSeconds(delay);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload current scene
+	}
 
-    public void StopRaceTimer(bool isPlayer)
-    {
-        if (isPlayer && playerFinishTime < 0f)
-        {
-            playerFinishTime = raceTime;
-            Debug.Log($"You finished with time: {FormatTime(playerFinishTime)}");
-        }
-        else if (!isPlayer && aiFinishTime < 0f)
-        {
-            aiFinishTime = raceTime;
-            Debug.Log($"AI finished with time: {FormatTime(aiFinishTime)}");
-        }
+	public void StopRaceTimer(bool isPlayer)
+	{
+		if (isPlayer && playerFinishTime < 0f)
+		{
+			playerFinishTime = raceTime;
+			Debug.Log($"You finished with time: {FormatTime(playerFinishTime)}");
+		}
+		else if (!isPlayer && aiFinishTime < 0f)
+		{
+			aiFinishTime = raceTime;
+			Debug.Log($"AI finished with time: {FormatTime(aiFinishTime)}");
+		}
 
-        // Check if both have finished
-        if (playerFinishTime > 0f && aiFinishTime > 0f)
-        {
-            isRunning = false;
+		// Check if both have finished
+		if (playerFinishTime > 0f && aiFinishTime > 0f)
+		{
+			isRunning = false;
 
-            if (resultsDisplay != null)
-            {
-                resultsDisplay.AddText("Results:\n");
-                resultsDisplay.AddResult("You", FormatTime(playerFinishTime));
-                resultsDisplay.AddResult("AI", FormatTime(aiFinishTime));
+			if (resultsDisplay != null)
+			{
+				resultsDisplay.AddText("Results:\n");
+				resultsDisplay.AddResult("You", FormatTime(playerFinishTime));
+				resultsDisplay.AddResult("AI", FormatTime(aiFinishTime));
 
-                string winner = playerFinishTime < aiFinishTime ? "You" : "AI";
-                resultsDisplay.AddText($"\n{winner} won!");
+				string winner = playerFinishTime < aiFinishTime ? "You" : "AI";
+				resultsDisplay.AddText($"\n{winner} won!");
 
-                StartCoroutine(ResetSceneAfterDelay(3f));
-            }
-        }
-    }
+				// TODO: uncomment this before the presentation
+				// StartCoroutine(ResetSceneAfterDelay(3f));
+			}
+		}
+	}
 
-    private string FormatTime(float time)
-    {
-        int minutes = Mathf.FloorToInt(time / 60f);
-        int seconds = Mathf.FloorToInt(time % 60f);
-        int milliseconds = Mathf.FloorToInt((time * 1000f) % 1000f);
-        return $"{minutes:00}:{seconds:00}:{milliseconds:000}";
-    }
+	private string FormatTime(float time)
+	{
+		int minutes = Mathf.FloorToInt(time / 60f);
+		int seconds = Mathf.FloorToInt(time % 60f);
+		int milliseconds = Mathf.FloorToInt((time * 1000f) % 1000f);
+		return $"{minutes:00}:{seconds:00}:{milliseconds:000}";
+	}
 }
