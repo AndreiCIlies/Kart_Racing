@@ -14,6 +14,9 @@ public class RaceTimer : MonoBehaviour
     private float raceTime = 0f;
     private bool isRunning = false;
 
+    private float playerFinishTime = -1f;
+    private float aiFinishTime = -1f;
+
     public static event System.Action OnRaceStart;
 
     private void Start()
@@ -65,23 +68,30 @@ public class RaceTimer : MonoBehaviour
 
     public void StopRaceTimer(bool isPlayer)
     {
-        if (isRunning)
+        if (isPlayer && playerFinishTime < 0f)
+        {
+            playerFinishTime = raceTime;
+            Debug.Log($"You finished with time: {FormatTime(playerFinishTime)}");
+        }
+        else if (!isPlayer && aiFinishTime < 0f)
+        {
+            aiFinishTime = raceTime;
+            Debug.Log($"AI finished with time: {FormatTime(aiFinishTime)}");
+        }
+
+        // Check if both have finished
+        if (playerFinishTime > 0f && aiFinishTime > 0f)
         {
             isRunning = false;
-            string formattedTime = FormatTime(raceTime);
 
             if (resultsDisplay != null)
             {
-                if (isPlayer)
-                {
-                    Debug.Log($"You finished with time: {formattedTime}");
-                    resultsDisplay.AddResult("You", formattedTime);
-                }
-                else
-                {
-                    Debug.Log($"AI finished with time: {formattedTime}");
-                    resultsDisplay.AddResult("AI", formattedTime);
-                }
+                resultsDisplay.AddText("Results:\n");
+                resultsDisplay.AddResult("You", FormatTime(playerFinishTime));
+                resultsDisplay.AddResult("AI", FormatTime(aiFinishTime));
+
+                string winner = playerFinishTime < aiFinishTime ? "You" : "AI";
+                resultsDisplay.AddText($"\n{winner} won!");
             }
         }
     }

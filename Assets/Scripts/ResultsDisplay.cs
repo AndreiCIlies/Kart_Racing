@@ -22,6 +22,12 @@ public class ResultsDisplay : MonoBehaviour
         UpdateResultsText();
     }
 
+    public void AddText(string text)
+    {
+        results.Add(text);
+        UpdateResultsText();
+    }
+
     private void UpdateResultsText()
     {
         string resultsString = string.Join("\n", results);
