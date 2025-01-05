@@ -50,7 +50,7 @@ WheelCollider:
   m_SuspensionDistance: 0.1
   m_ForceAppPointDistance: 0
   m_Mass: 5
-  m_WheelDampingRate: 0.15
+  m_WheelDampingRate: 0.05
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -208,7 +208,7 @@ WheelCollider:
   m_SuspensionDistance: 0.15
   m_ForceAppPointDistance: 0
   m_Mass: 5
-  m_WheelDampingRate: 0.15
+  m_WheelDampingRate: 0.05
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -538,7 +538,7 @@ WheelCollider:
   m_SuspensionDistance: 0.1
   m_ForceAppPointDistance: 0
   m_Mass: 5
-  m_WheelDampingRate: 0.15
+  m_WheelDampingRate: 0.05
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -628,7 +628,7 @@ WheelCollider:
   m_SuspensionDistance: 0.15
   m_ForceAppPointDistance: 0
   m_Mass: 5
-  m_WheelDampingRate: 0.15
+  m_WheelDampingRate: 0.05
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -1165,11 +1165,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36889683c5faf9549a25766c2ef27f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motorTorque: 150
-  brakeTorque: 2000
   maxSpeedKPH: 120
   steeringRange: 25
   steeringRangeAtMaxSpeed: 2
+  maxMotorTorque: 150
+  brakeTorque: 2000
+  raceTimer: {fileID: 0}
+  finishLine: {fileID: 0}
 --- !u!4 &4202967460633139851 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: adffb0d840b96024194cf68a6579db23, type: 3}
