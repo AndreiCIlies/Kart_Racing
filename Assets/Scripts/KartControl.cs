@@ -10,7 +10,7 @@ public class KartControl : MonoBehaviour
 	[SerializeField] private float brakeTorque = 2000;
 	[SerializeField] private RaceTimer raceTimer; // Reference to RaceTimer
 	[SerializeField] private Collider finishLine; // Reference to the finish line collider
-	
+
 
 	private WheelControl[] wheels;
 	private Rigidbody rigidBody;
@@ -149,5 +149,10 @@ public class KartControl : MonoBehaviour
 	{
 		// Unsubscribe from events to prevent errors
 		RaceTimer.OnRaceStart -= StartRace;
+	}
+
+	public float GetMaxSpeedKPH()
+	{
+		return maxSpeedKPH;
 	}
 }
