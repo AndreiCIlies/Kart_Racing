@@ -8,15 +8,15 @@ public class KartControl : MonoBehaviour
 	[SerializeField] private float steeringRangeAtMaxSpeed = 2;
 	[SerializeField] private float maxMotorTorque = 150;
 	[SerializeField] private float brakeTorque = 2000;
-	[SerializeField] private RaceTimer raceTimer; // Reference to RaceTimer
-	[SerializeField] private Collider finishLine; // Reference to the finish line collider
+	[SerializeField] private RaceTimer raceTimer;
+	[SerializeField] private Collider finishLine;
 
 
 	private WheelControl[] wheels;
 	private Rigidbody rigidBody;
 	private float maxSpeedMPS;
 	private bool isRaceStarted = false;
-	private bool hasFinished = false; // To ensure the results are displayed only once
+	private bool hasFinished = false;
 
 	public void Start()
 	{
