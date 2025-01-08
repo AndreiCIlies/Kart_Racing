@@ -53,6 +53,8 @@ public class KartControl : MonoBehaviour
 		{
 			var checkpointManager = FindAnyObjectByType<CheckpointManager>();
 			var respawnPositionAndRotation = checkpointManager?.GetRespawnPositionAndRotation();
+
+			// Respawn the kart at the last checkpoint
 			if (respawnPositionAndRotation != null)
 			{
 				transform.position = respawnPositionAndRotation.Item1;

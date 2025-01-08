@@ -30,7 +30,7 @@ public class CheckpointManager : MonoBehaviour
 		}
 		else
 		{
-			Debug.Log($"Checkpoint {index} does not come after checkpoint {lastCheckpointIndex}");
+			Debug.Log($"Checkpoint {index} is not the next checkpoint after checkpoint {lastCheckpointIndex}");
 			return false;
 		}
 	}
