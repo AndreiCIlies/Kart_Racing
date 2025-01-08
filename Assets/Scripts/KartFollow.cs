@@ -13,6 +13,7 @@ public class KartFollow : MonoBehaviour
 	[SerializeField] private Vector3 firstOffset = new(0, 1, 0);
 	[SerializeField] private Vector3 firstLookAtPosition = new(0, 0, 4);
 	[SerializeField] private Vector3 thirdOffset = new(0, 2, -4);
+	[SerializeField] private Vector3 thirdLookAtPoisiton = new(0, 0, 2);
 	[SerializeField] private float thirdSmoothFactor = 0.8f;
 
 	private CameraMode cameraMode;
@@ -26,11 +27,11 @@ public class KartFollow : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		if (Input.GetKey(KeyCode.F1))
+		if (Input.GetKey(KeyCode.Alpha1))
 		{
 			cameraMode = CameraMode.FirstPerson;
 		}
-		else if (Input.GetKey(KeyCode.F2))
+		else if (Input.GetKey(KeyCode.Alpha2))
 		{
 			cameraMode = CameraMode.ThirdPerson;
 		}
@@ -45,7 +46,7 @@ public class KartFollow : MonoBehaviour
 		{
 			Vector3 desiredPosition = kartTransform.TransformPoint(thirdOffset);
 			transform.position = Vector3.Lerp(transform.position, desiredPosition, thirdSmoothFactor);
-			transform.LookAt(kartTransform.position);
+			transform.LookAt(kartTransform.TransformPoint(thirdLookAtPoisiton));
 		}
 	}
 }
