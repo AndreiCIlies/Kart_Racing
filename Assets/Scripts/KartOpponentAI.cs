@@ -44,7 +44,7 @@ public class KartOpponentAI : MonoBehaviour
 
         AlignToGround();
 
-        if (!agent.pathPending && agent.remainingDistance < 1f)
+        if (!agent.pathPending && agent.remainingDistance < 5f)
         {
             if (!isHeadingToFinish)
             {
