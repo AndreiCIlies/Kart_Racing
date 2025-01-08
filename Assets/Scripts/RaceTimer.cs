@@ -100,8 +100,7 @@ public class RaceTimer : MonoBehaviour
 				string winner = playerFinishTime < aiFinishTime ? "You" : "AI";
 				resultsDisplay.AddText($"\n{winner} won!");
 
-				// TODO: uncomment this before the presentation
-				// StartCoroutine(ResetSceneAfterDelay(3f));
+				StartCoroutine(ResetSceneAfterDelay(3f));
 			}
 		}
 	}
