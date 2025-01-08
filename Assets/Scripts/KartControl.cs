@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 public class KartControl : MonoBehaviour
@@ -42,11 +43,24 @@ public class KartControl : MonoBehaviour
 
 	public void Update()
 	{
-		// If the race hasn't started, prevent movement
 		if (!isRaceStarted)
 		{
 			ApplyBrakes();
 			return;
+		}
+
+		if (Input.GetKey(KeyCode.R))
+		{
+			var checkpointManager = FindAnyObjectByType<CheckpointManager>();
+			var respawnPositionAndRotation = checkpointManager?.GetRespawnPositionAndRotation();
+			if (respawnPositionAndRotation != null)
+			{
+				transform.position = respawnPositionAndRotation.Item1;
+				transform.rotation = respawnPositionAndRotation.Item2;
+				rigidBody.linearVelocity = Vector3.zero;
+				rigidBody.angularVelocity = Vector3.zero;
+				return;
+			}
 		}
 
 		// Get inputs for acceleration and steering
@@ -57,7 +71,7 @@ public class KartControl : MonoBehaviour
 		float forwardSpeed = Vector3.Dot(rigidBody.linearVelocity, transform.forward);
 		float speedFactor = Mathf.InverseLerp(0, maxSpeedMPS, Mathf.Abs(forwardSpeed));
 
-		float currentMotorTorque = MotorTorqueFn(speedFactor);
+		float currentMotorTorque = Mathf.Lerp(maxMotorTorque, 0, speedFactor);
 		float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
 		// Determine if acceleration direction matches movement direction
@@ -117,13 +131,6 @@ public class KartControl : MonoBehaviour
 		// Reset Rigidbody velocity
 		rigidBody.linearVelocity = Vector3.zero;
 		rigidBody.angularVelocity = Vector3.zero;
-	}
-
-	private float MotorTorqueFn(float speedFactor)
-	{
-		// Calculate motor force based on speed
-		Assert.IsTrue(speedFactor >= 0 && speedFactor <= 1, "Speed factor must be between 0 and 1");
-		return Mathf.Lerp(maxMotorTorque, 0, speedFactor);
 	}
 
 	private void StartRace()
