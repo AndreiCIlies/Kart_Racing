@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -29,6 +30,12 @@ public class MainMenuManager : MonoBehaviour
 
 	public void StartGame()
 	{
-		UnityEngine.SceneManagement.SceneManager.LoadScene("RaceScene");
+		SceneManager.LoadScene("RaceScene");
+	}
+
+	public void QuitGame()
+	{
+		Debug.Log("Quit game");
+		Application.Quit();
 	}
 }

@@ -67,10 +67,10 @@ public class RaceTimer : MonoBehaviour
 		}
 	}
 
-	private IEnumerator ResetSceneAfterDelay(float delay)
+	private IEnumerator ResetMenuAfterDelay(float delay)
 	{
 		yield return new WaitForSeconds(delay);
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload current scene
+		SceneManager.LoadScene("MainMenu"); // Reload current scene
 	}
 
 	public void StopRaceTimer(bool isPlayer)
@@ -100,7 +100,7 @@ public class RaceTimer : MonoBehaviour
 				string winner = playerFinishTime < aiFinishTime ? "You" : "AI";
 				resultsDisplay.AddText($"\n{winner} won!");
 
-				StartCoroutine(ResetSceneAfterDelay(3f));
+				StartCoroutine(ResetMenuAfterDelay(3f));
 			}
 		}
 	}
